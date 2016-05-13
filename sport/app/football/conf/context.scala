@@ -2,13 +2,12 @@ package conf
 
 import app.LifecycleComponent
 import common._
-import conf.switches.Switches
 import feed.CompetitionsService
 import model.{LiveBlogAgent, TeamMap}
-import pa.{PaClientConfig, Http, PaClient, PaClientErrorsException}
+import pa.{Http, PaClient, PaClientErrorsException}
 import play.api.inject.ApplicationLifecycle
 import play.api.libs.ws.WSClient
-
+import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
 class FootballLifecycle(
@@ -86,10 +85,7 @@ class FootballClient(wsClient: WSClient) extends PaClient with Http with Logging
 
     override def GET(urlString: String): Future[pa.Response] = {
 
-        val url = if (Switches.CachedFootballStats.isSwitchedOn)
-          urlString.replace(PaClientConfig.baseUrl, cachedBase)
-        else
-          urlString
+        val promiseOfResponse = WS.url(urlString).withRequestTimeout(2.seconds).get()
 
         val promiseOfResponse = wsClient.url(url).withRequestTimeout(2000).get()
 
