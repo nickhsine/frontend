@@ -11,7 +11,6 @@ import conf.{SportConfiguration, FootballClient}
 import football.model._
 import football.collections.RichListTest
 import pa.{Http, Response => PaResponse}
-
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
