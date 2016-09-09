@@ -1,17 +1,19 @@
 package recorder
 
 import java.io._
-import java.net.URI
+import java.net.{SocketAddress, URI}
 import java.nio.ByteBuffer
+import java.nio.charset.Charset
 import java.util
 
 import common.ExecutionContexts
 import conf.Configuration
-import com.ning.http.client.uri.Uri
-import com.ning.http.client.{FluentCaseInsensitiveStringsMap, Response => AHCResponse}
+import io.netty.handler.codec.http.HttpHeaders
+import org.asynchttpclient.{Response => AHCResponse}
+import org.asynchttpclient.uri.Uri
 import org.apache.commons.codec.digest.DigestUtils
 import play.api.libs.ws.WSResponse
-import play.api.libs.ws.ning.NingWSResponse
+import play.api.libs.ws.ahc.AhcWSResponse
 
 import scala.concurrent.Future
 import scala.io.Source
@@ -90,9 +92,9 @@ trait DefaultHttpRecorder extends HttpRecorder[WSResponse] {
   val errorPrefix = "Error:"
   override def toResponse(str: String) = {
     if (str.startsWith(errorPrefix)) {
-      NingWSResponse(Response("", str.replace(errorPrefix, "").toInt))
+      AhcWSResponse(Response("", str.replace(errorPrefix, "").toInt))
     } else {
-      NingWSResponse(Response(str, 200))
+      AhcWSResponse(Response(str, 200))
     }
   }
 
@@ -106,7 +108,7 @@ trait DefaultHttpRecorder extends HttpRecorder[WSResponse] {
 
   private case class Response(getResponseBody: String, status: Int) extends AHCResponse {
     def getContentType: String = "application/json"
-    def getResponseBody(charset: String): String = getResponseBody
+    def getResponseBody(charset: Charset): String = getResponseBody
     def getStatusCode: Int = status
     def getResponseBodyAsBytes: Array[Byte] = getResponseBody.getBytes
     def getResponseBodyAsByteBuffer: ByteBuffer = throw new NotImplementedError()
@@ -117,11 +119,13 @@ trait DefaultHttpRecorder extends HttpRecorder[WSResponse] {
     def getUri: Uri = throw new NotImplementedError()
     def getHeader(name: String): String = throw new NotImplementedError()
     def getHeaders(name: String): util.List[String] = throw new NotImplementedError()
-    def getHeaders: FluentCaseInsensitiveStringsMap = throw new NotImplementedError()
     def isRedirected: Boolean = throw new NotImplementedError()
     def getCookies = throw new NotImplementedError()
     def hasResponseStatus: Boolean = throw new NotImplementedError()
     def hasResponseHeaders: Boolean = throw new NotImplementedError()
     def hasResponseBody: Boolean = throw new NotImplementedError()
+    def getHeaders: HttpHeaders = throw new NotImplementedError()
+    def getLocalAddress: SocketAddress = throw new NotImplementedError()
+    def getRemoteAddress: SocketAddress = throw new NotImplementedError()
   }
 }
