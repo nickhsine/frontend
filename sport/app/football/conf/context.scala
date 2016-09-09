@@ -76,7 +76,6 @@ class FootballLifecycle(
 
 class FootballClient(wsClient: WSClient) extends PaClient with Http with Logging with ExecutionContexts {
 
-
     // TODO - once we have proved this works with the switch, we can simply remove the switch and
     // uncomment this line to make it permanent
     //override lazy val base: String = "http://football-api.gu-web.net/v1.5"
@@ -85,9 +84,7 @@ class FootballClient(wsClient: WSClient) extends PaClient with Http with Logging
 
     override def GET(urlString: String): Future[pa.Response] = {
 
-        val promiseOfResponse = WS.url(urlString).withRequestTimeout(2.seconds).get()
-
-        val promiseOfResponse = wsClient.url(url).withRequestTimeout(2000).get()
+        val promiseOfResponse = wsClient.url(urlString).withRequestTimeout(2.seconds).get()
 
         promiseOfResponse.map{ r =>
 
