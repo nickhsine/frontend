@@ -8,12 +8,14 @@ import org.scalatest.{BeforeAndAfterAll, DoNotDiscover, FlatSpec, Matchers}
   extends FlatSpec
   with Matchers
   with ConfiguredTestSuite
-  with BeforeAndAfterAll with WithTestWsClient
+  with BeforeAndAfterAll
+  with WithMaterializer
+  with WithTestWsClient
   with WithTestContentApiClient {
 
   val videoUrl = "uk/video/2012/jun/26/queen-enniskillen-northern-ireland-video"
   val videoUrlWithDodgyOctpusUrl = "football/video/2015/feb/10/manchester-united-louis-van-gaal-long-ball-video"
-  val mediaController = new MediaController(testContentApiClient)
+  lazy val mediaController = new MediaController(testContentApiClient)
 
   "Media Controller" should "200 when content type is video" in {
     val result = mediaController.render(videoUrl)(TestRequest(videoUrl))

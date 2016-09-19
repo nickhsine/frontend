@@ -3,12 +3,14 @@ package dfp
 import common.dfp.{CapiLookupAgent, GuLineItem, GuTargeting}
 import org.joda.time.DateTime
 import org.scalatest._
-import test.{WithTestContentApiClient, WithTestWsClient}
+import test._
 
 class DfpDataCacheJobTest
   extends FlatSpec
   with Matchers
+  with SingleServerSuite
   with BeforeAndAfterAll
+  with WithMaterializer
   with WithTestWsClient
   with WithTestContentApiClient {
 
