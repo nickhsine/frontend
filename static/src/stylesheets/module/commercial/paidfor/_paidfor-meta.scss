@@ -18,10 +18,6 @@
 
 .paidfor-meta__label {
     font-weight: 700;
-
-    .commercial__header & {
-        padding-left: 0;
-    }
 }
 
 .paidfor-label .popup__toggle {
@@ -43,10 +39,5 @@
 
     &.is-active svg {
         transform: rotate(180deg);
-    }
-
-    .commercial__header & {
-        border: 0;
-        font-weight: 400;
     }
 }

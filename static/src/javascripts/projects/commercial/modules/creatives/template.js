@@ -33,7 +33,6 @@ define([
         if (this.params.Toneclass) {
             this.params.isSoulmates = params.Toneclass.indexOf('soulmates') !== -1;
             this.params.isMembership = params.Toneclass.indexOf('membership') !== -1;
-            this.params.HeaderToneclass = 'commercial__header--' + this.params.Toneclass.replace('commercial--tone-', '');
         }
 
         this.params.marque36icon = svgs('marque36icon');

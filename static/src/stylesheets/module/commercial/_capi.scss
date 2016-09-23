@@ -2,12 +2,6 @@
    Content API component
    ========================================================================== */
 
-@mixin c-capi-leftCol {
-    .commercial__body {
-        padding-top: $gs-baseline;
-    }
-}
-
 .fc-container--advertisement-feature {
     .linkslist__action:visited,
     .fc-item__link:visited,
