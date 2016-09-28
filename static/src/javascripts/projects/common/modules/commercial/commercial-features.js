@@ -128,11 +128,11 @@ define([
             switches.liveblogAdverts;
 
         this.canReasonablyAskForMoney = // eg become a supporter, give a contribution
-            !(userFeatures.isPayingMember() || config.page.isSensitive || config.page.isAdvertisementFeature);
+            !(userFeatures.isPayingMember() || config.page.isSensitive || config.page.isAdvertisementFeature || config.page.blogIds == 'childrens-books-site/childrens-books-site');
 
         this.canAskForAContribution =
             this.canReasonablyAskForMoney && config.page.edition === 'UK'; // Contributions only testing in UK so far
-        
+
         this.async = {
             canDisplayMembershipEngagementBanner : detect.adblockInUse.then(function (adblockUsed) {
                 return !adblockUsed && self.canReasonablyAskForMoney;
