@@ -55,7 +55,11 @@
         @if(SearchSwitch.isSwitchedOn) {
             <ul class="navigation-group navigation-border secondary-navigation">
                 <li class="navigation-group__item navigation-group__item--search">
-                    <form class="navigation-group__search-container" action="https://www.google.co.uk/search">
+                    <form
+                        class="navigation-group__search-container"
+                        action="https://www.google.co.uk/search"
+                        data-link-name="main-navigation : search"
+                    >
                         @* label surrounding the input and icon so that if you click the search icon it will trigger the submit *@
                         <label for="submit-google-search">
                             <input class="u-h" type="submit" id="submit-google-search">
@@ -74,7 +78,10 @@
             <li class="navigation-group__item js-editionalise-secondary-nav"
                 @* TODO: should membership really only show up in the uk edition? *@
                 data-edition="uk">
-                    <a href="@Configuration.id.membershipUrl/supporter?INTCMP=DOTCOM_HEADER_BECOMEMEMBER_UK">
+                    <a
+                        href="@Configuration.id.membershipUrl/supporter?INTCMP=DOTCOM_HEADER_BECOMEMEMBER_UK"
+                        data-link-name="main-navigation : membership"
+                    >
                         @fragments.inlineSvg("marque-36", "icon", List("navigation-group__icon", "navigation-group__user-icon", "navigation-group__membership-icon"))
                         membership
                     </a>
