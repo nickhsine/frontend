@@ -92,20 +92,28 @@
                 @if(edition.id.toLowerCase != "uk") { hidden }>
 
                 @NewNavigation.NavFooterLinks.getEditionalisedNavLinks(edition).map { item =>
-                    <li class="navigation-group__item"><a href="@LinkTo { @item.url }"> @item.name </a></li>
+                    <li class="navigation-group__item">
+                        <a href="@LinkTo { @item.url }" data-link-name="main-navigation-item : @item.name">
+                            @item.name
+                        </a>
+                    </li>
                 }
             </ul>
         }
 
         <ul class="navigation-group navigation-border secondary-navigation">
-            <li class="navigation-group__item"><a href="https://www.facebook.com/theguardian">
-                @fragments.inlineSvg("share-facebook", "icon", List("navigation-group__icon", "navigation-group__social-icon"))
-                Facebook
-            </a></li>
-            <li class="navigation-group__item"><a href="https://twitter.com/guardian">
-                @fragments.inlineSvg("share-twitter", "icon", List("navigation-group__icon", "navigation-group__social-icon"))
-                Twitter
-            </a></li>
+            <li class="navigation-group__item">
+                <a href="https://www.facebook.com/theguardian" data-link-name="main-navigation-item : facebook">
+                    @fragments.inlineSvg("share-facebook", "icon", List("navigation-group__icon", "navigation-group__social-icon"))
+                    Facebook
+                </a>
+            </li>
+            <li class="navigation-group__item">
+                <a href="https://twitter.com/guardian" data-link-name="main-navigation-item : twitter">
+                    @fragments.inlineSvg("share-twitter", "icon", List("navigation-group__icon", "navigation-group__social-icon"))
+                    Twitter
+                </a>
+            </li>
         </ul>
     </div>
 </div>
