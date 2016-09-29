@@ -525,15 +525,21 @@ object GalleryCaptionCleaner {
   }
 }
 
-object InteractiveCleaner {
-  def apply(interactive: String) = {
-    val document = Jsoup.parse(interactive)
-    val srcdoc = document.getElementsByTag("iframe").attr("srcdoc")
-    if (srcdoc != null) {
-        val iframedoc = Jsoup.parse(srcdoc)
-        document.html(iframedoc.getElementsByTag("noscript").html())
+object InteractiveSrcdocCleaner extends HtmlCleaner {
+  override def clean(document: Document): Document = {
+    if (interactivePressing.isSwitchedOn) {
+      for {
+        iframe <- Option(document.getElementsByTag("iframe").first())
+        srcdoc = iframe.attr("srcdoc")
+        if srcdoc.nonEmpty
+      } yield {
+        // noscript is added for immersive interactives, no idea why
+        // see https://github.com/guardian/flexible-content/pull/1597
+        // hopefully we can remove all of this soon anyway
+        iframe.replaceWith(Jsoup.parse(srcdoc).getElementsByTag("noscript").first())
+      }
     }
-    document.toString
+    document
   }
 }
 

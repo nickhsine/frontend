@@ -1,16 +1,17 @@
 @(page: InteractivePage)(implicit request: RequestHeader)
 @import common.Edition
-@import views.support.{RenderClasses, InteractiveCleaner}
+@import views.support.RenderClasses
 @import views.support.Commercial.isPaidContent
 @import views.support.TrailCssClasses.toneClass
-@import conf.switches.Switches.interactivePressing
+@import views.InteractiveBodyCleaner
 
 @body(page.interactive, page.item.content.isImmersive, isPaidContent(page.interactive, page))
 
 @bodyRaw(interactive: model.Interactive) = {
     @interactive.maybeBody.map { body =>
-        @HtmlFormat.raw(body)
+        @InteractiveBodyCleaner(interactive)
     }.getOrElse {
+        @* legacy support? *@
         <figure class="interactive" data-interactive="@{conf.Configuration.interactive.url}@{request.path.drop(1)}/boot.js"></figure>
     }
 }
@@ -18,15 +19,7 @@
 @body(interactive: model.Interactive, isImmersive: Boolean, isPaidContent: Boolean) = {
     @if(isImmersive) {
         <div class="@RenderClasses(Map("paid-content--advertisement-feature" -> isPaidContent))">
-            @if(interactive.hasSrcdoc) {
-                @if(interactivePressing.isSwitchedOn) {
-                    @HtmlFormat.raw(InteractiveCleaner(interactive.fields.body))
-                } else {
-                    @bodyRaw(interactive)
-                }
-            } else {
-                @interactive.figureEl.map(HtmlFormat.raw(_))
-            }
+            @bodyRaw(interactive)
         </div>
     } else {
         <div class="l-side-margins">
@@ -40,30 +33,26 @@
                     "content", "content--interactive", "tonal", s"tonal--${toneClass(interactive)}"
                 )"
                 itemscope itemtype="@interactive.metadata.schemaType" role="main">
-    
+
                 @if(isPaidContent){
                     @fragments.guBand()
                 }
-    
+
                 @fragments.headDefault(interactive, page, showBadge = true)
-    
+
                 <div class="content__main tonal__main tonal__main--@toneClass(interactive)">
                     <div class="gs-container u-cf">
                         <div class="content__main-column">
                             @fragments.contentMeta(interactive, page, showBadge = false)
                         </div>
                     </div>
-    
+
                     <div class="gs-container" data-test-id="interactive-content-body">
                         <div class="content__main-column content__main-column--interactive">
-                            @if(!isImmersive) {
-                                @bodyRaw(interactive)
-                            } else {
-                                @HtmlFormat.raw(interactive.fallbackEl)
-                            }
+                            @bodyRaw(interactive)
                         </div>
                     </div>
-    
+
                     <div class="gs-container u-cf">
                         <div class="content__main-column content__meta-footer">
                             @fragments.contentMeta(interactive, page, showBadge = false)
