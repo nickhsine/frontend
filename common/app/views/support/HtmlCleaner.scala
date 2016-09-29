@@ -536,7 +536,8 @@ object InteractiveSrcdocCleaner extends HtmlCleaner {
         // noscript is added for immersive interactives, no idea why
         // see https://github.com/guardian/flexible-content/pull/1597
         // hopefully we can remove all of this soon anyway
-        iframe.replaceWith(Jsoup.parse(srcdoc).getElementsByTag("noscript").first())
+        val html = Jsoup.parse(srcdoc).getElementsByTag("noscript").html()
+        iframe.after(html).remove()
       }
     }
     document
