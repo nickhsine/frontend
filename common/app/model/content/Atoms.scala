@@ -1,15 +1,16 @@
 package model.content
 
 import com.gu.contentapi.client.model.{v1 => contentapi}
-import com.gu.contentatom.thrift.{atom => atomapi, AtomData}
+import com.gu.contentatom.thrift.{atom => atomapi, Atom => ThriftAtom, AtomData}
 import model.{ImageAsset, ImageMedia}
 import play.api.libs.json.{JsError, JsSuccess, Json}
 import quiz._
 
 final case class Atoms(
-  quizzes: Seq[Quiz]
+  quizzes: Seq[Quiz],
+  interactives: Seq[InteractiveAtom]
 ) {
-  val all: Seq[Atom] = quizzes
+  val all: Seq[Atom] = quizzes ++ interactives
 }
 
 sealed trait Atom {
@@ -25,19 +26,40 @@ final case class Quiz(
   revealAtEnd: Boolean
 ) extends Atom
 
+final case class InteractiveAtom(
+  override val id: String,
+  `type`: String,
+  title: String,
+  css: String,
+  html: String,
+  inlineJS: Option[String],
+  mainJS: Option[String],
+  docData: Option[String]
+) extends Atom
+
 object Atoms extends common.Logging {
+  def extract[T](atoms: Option[Seq[ThriftAtom]], extractFn: ThriftAtom => T): Seq[T] = {
+    try {
+      atoms.getOrElse(Nil).map(extractFn)
+    } catch {
+      case e: Exception =>
+        logException(e)
+        Nil
+    }
+  }
+
   def make(content: contentapi.Content): Option[Atoms] = {
     content.atoms.map { atoms =>
-      val quizzes: Seq[atomapi.quiz.QuizAtom] = try {
-        atoms.quizzes.getOrElse(Nil).map(atom => {
-          atom.data.asInstanceOf[AtomData.Quiz].quiz
-        })
-      } catch {
-        case e: Exception =>
-          logException(e)
-          Nil
-      }
-      Atoms(quizzes = quizzes.map(Quiz.make(content.id, _)))
+      val quizzes = extract(atoms.quizzes, atom => {
+        val quizData = atom.data.asInstanceOf[AtomData.Quiz].quiz
+        Quiz.make(content.id, quizData)
+      })
+      val interactives = extract(atoms.interactives, atom => {
+        val interactiveData = atom.data.asInstanceOf[AtomData.Interactive].interactive
+        InteractiveAtom.make(atom.id, interactiveData)
+      })
+
+      Atoms(quizzes = quizzes, interactives = interactives)
     }
   }
 }
@@ -123,6 +145,21 @@ object Quiz extends common.Logging {
       quizType = quiz.quizType,
       content = content,
       revealAtEnd = quiz.revealAtEnd
+    )
+  }
+}
+
+object InteractiveAtom {
+  def make(id: String, interactive: atomapi.interactive.InteractiveAtom): InteractiveAtom = {
+    InteractiveAtom(
+      id = id,
+      `type` = interactive.`type`,
+      title = interactive.title,
+      css = interactive.css,
+      html = interactive.html,
+      inlineJS = interactive.inlineJS,
+      mainJS = interactive.mainJS,
+      docData = interactive.docData
     )
   }
 }

@@ -1,0 +1,11 @@
+@(interactive: _root_.model.content.InteractiveAtom)
+
+<figure class="interactive-atom" @for(js <- interactive.mainJS) { data-interactive="@js" }>
+    <style>
+        @HtmlFormat.raw(interactive.css)
+    </style>
+    @HtmlFormat.raw(interactive.html)
+    @for(js <- interactive.inlineJS) {
+        <script>@js</script>
+    }
+</figure>

@@ -187,6 +187,7 @@ object ContentTypeFormat {
   implicit val quizResultGroupFormat = Json.format[ResultGroup]
   implicit val quizContentFormat = Json.format[QuizContent]
   implicit val quizFormat = Json.format[Quiz]
+  implicit val interactiveAtomFormat = Json.format[InteractiveAtom]
   implicit val atomsFormat = Json.format[Atoms]
   implicit val blockAttributesFormat = Json.format[BlockAttributes]
   implicit val bodyBlockFormat = Json.format[BodyBlock]
