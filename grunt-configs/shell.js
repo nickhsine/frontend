@@ -42,6 +42,10 @@ module.exports = function () {
 
         atomiseCSS: {
             command: 'make atomise-css'
+        },
+
+        rollup: {
+            command: 'node rollup.js'
         }
     };
 };

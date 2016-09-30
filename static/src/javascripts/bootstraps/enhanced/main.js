@@ -8,8 +8,8 @@ define([
     'common/utils/detect',
     'common/utils/mediator',
     'common/utils/user-timing',
-    './common',
-    './sport',
+    'bootstraps/enhanced/common',
+    'bootstraps/enhanced/sport',
     'enhanced-common'
 ], function (
     fastdom,
