@@ -13,7 +13,6 @@ define([
     'commercial/modules/creatives/revealer',
     'commercial/modules/creatives/expandable-v2',
     'commercial/modules/creatives/expandable-v3',
-    'commercial/modules/creatives/expandable-video',
     'commercial/modules/creatives/expandable-video-v2',
     'commercial/modules/creatives/fabric-v1',
     'commercial/modules/creatives/fabric-expanding-v1',
