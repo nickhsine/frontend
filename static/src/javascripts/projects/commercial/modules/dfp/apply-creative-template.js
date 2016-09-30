@@ -11,7 +11,6 @@ define([
     'commercial/modules/creatives/frame',
     'commercial/modules/creatives/facebook',
     'commercial/modules/creatives/revealer',
-    'commercial/modules/creatives/expandable',
     'commercial/modules/creatives/expandable-v2',
     'commercial/modules/creatives/expandable-v3',
     'commercial/modules/creatives/expandable-video',
