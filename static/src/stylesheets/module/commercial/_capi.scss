@@ -195,4 +195,9 @@
         }
     }
 
+    .badge--alt,
+    .badge--alt > .badge__link {
+        border-color: $neutral-2;
+    }
+
 }
