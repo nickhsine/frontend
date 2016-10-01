@@ -38,7 +38,7 @@ define([
 
         var isLiveBlog = config.page.isLiveBlog;
 
-        var isHosted = config.page.tones === 'Hosted';
+        var isHosted = config.page.isHosted;
 
         var isMatchReport = config.hasTone('Match reports');
 
