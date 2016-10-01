@@ -100,7 +100,7 @@ define([
         var slotName = slotTarget ? slotTarget : name,
             attributes = {},
             definition,
-            classes = [];
+            signatures;
 
         definition = adSlotDefinitions[slotName] || adSlotDefinitions.inline;
         name = definition.name || name;
@@ -131,11 +131,9 @@ define([
             attributes.keywords = keywords;
         }
 
-        if (slotTypes) {
-            classes = (Array.isArray(slotTypes) ? slotTypes : [slotTypes]).map(function (type) {
-                return 'ad-slot--' + type;
-            });
-        }
+        signatures = Array.isArray(slotTypes) ?
+            (slotTypes.indexOf(name) < 0 ? slotTypes.concat(name) : slotTypes) :
+            (slotTypes && slotTypes !== name ? [name, slotTypes] : [name]);
 
         return createAdSlotElement(
             name,
@@ -143,7 +141,9 @@ define([
                 result['data-' + key] = attributes[key];
                 return result;
             }, {}),
-            classes
+            signatures.map(function (sig) {
+                return 'ad-slot--' + sig;
+            })
         );
     };
 
